@@ -129,9 +129,11 @@
   <ItemGroup>
     <ClCompile Include="Seat.cpp" />
     <ClCompile Include="Stadium.cpp" />
+    <ClCompile Include="StadiumPlan.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Seat.h" />
+    <ClInclude Include="StadiumPlan.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

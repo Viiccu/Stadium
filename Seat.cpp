@@ -1,5 +1,8 @@
 #include "Seat.h"
 #include <iomanip>
+#include <string>
+
+using namespace std;
 
 Seat::Seat() { }
 
@@ -10,7 +13,7 @@ Seat::Seat(const Seat& seat)
 	this->number = seat.GetNumber();
 }
 
-Seat::Seat(char& section, char& row, int& number)
+Seat::Seat(char section, char row, int number)
 {
 	this->SetSection(section);
 	this->SetRow(row);
@@ -41,10 +44,29 @@ void Seat::SetNumber(int number)
 		this->number = 0;
 }
 
+string Seat::GetSeat() const
+{
+	string numAsString = (this->number / 10 > 0) ? 
+		to_string(this->GetNumber())
+		: "0" + to_string(this->GetNumber());
+
+	string secAsString = ""; 
+	secAsString = this->GetSection();
+	
+	string rowAsString = "";
+	rowAsString = this->GetRow();
+
+	return secAsString + rowAsString + numAsString;
+}
+
 std::ostream& operator<<(std::ostream& os, Seat& seat)
 {
-	os << seat.GetSection() << seat.GetRow() 
+	if (seat.available)
+		os << seat.GetSection() << seat.GetRow()
 		<< std::setw(2) << std::setfill('0') << seat.GetNumber();
+	else
+		os << "XXXX";
+	
 	return os;
 }
 

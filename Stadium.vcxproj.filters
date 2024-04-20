@@ -21,9 +21,15 @@
     <ClCompile Include="Seat.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="StadiumPlan.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Seat.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StadiumPlan.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
