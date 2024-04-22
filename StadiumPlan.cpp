@@ -1,4 +1,5 @@
-#include "StadiumPlan.h"
+﻿#include "StadiumPlan.h"
+#include <vector>
 
 
 StadiumPlan::StadiumPlan()
@@ -50,3 +51,57 @@ StadiumPlan::StadiumPlan()
 		}
 	}
 }
+
+string StadiumPlan::FindSeat(map<string, Seat> &section, string seat, char maxLetter, int maxNum)
+{
+	char row = seat[1];
+	int column = atoi(&seat[2]);
+
+	for (int i = 1; i < 18; i++)
+	{
+		for (int j = -i; j <= i; j++)
+		{
+			if ((row + j) > maxLetter || (row + j) < 'A') continue;
+
+			for (int k = -i; k <= i; k++)
+			{
+				if (column + k > maxNum || column + k < 1) continue;
+
+				string key = "";
+				string aux = "";
+				aux = (row + j);
+
+				key += seat[0] + aux + ((((column + k) / 10) > 0) ? "" : "0") + to_string(column + k);
+
+				if (section.find(key) != section.end() && section.find(key)->second.IsAvailable())
+				{
+					return section.find(key)->second.GetSeat();
+				}
+			}
+		}
+	}
+
+	return "";
+}
+
+string StadiumPlan::FindNearestSeat(string seat)
+{
+	switch (seat[0])
+	{
+	case 'A':
+		return FindSeat(sectionA, seat, 'A', 10);
+	case 'B': 
+		return FindSeat(sectionB, seat, 'E', 18);
+	case 'C':
+		return FindSeat(sectionC, seat, 'E', 18);
+	case 'D':
+		return FindSeat(sectionB, seat, 'L', 4);
+	case 'E': 
+		return FindSeat(sectionB, seat, 'L', 4);
+
+	default: cout << "\n\nERROR 404 - Not Found: Such section does not exist! \n\n"; break;
+	}
+
+	return "";
+}
+

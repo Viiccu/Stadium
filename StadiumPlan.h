@@ -17,7 +17,14 @@ private:
 	map<string, Seat> sectionE;
 
 public:
+	// ctor
 	StadiumPlan();
+
+	// methods
+	string FindNearestSeat(string);
+
+private:
+	string FindSeat(map<string, Seat>&, string, char, int);
 
 };
 

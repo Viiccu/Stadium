@@ -12,7 +12,7 @@ private:
 	char section{ ' ' };
 	char row{ ' ' };
 	int number{ 0 };
-	bool available{ true };
+	bool available{ false };
 
 public:
 	// ctors
@@ -34,6 +34,9 @@ public:
 
 	// overloads
 	friend std::ostream& operator<<(std::ostream&, Seat&);
+
+	// methods
+	bool IsAvailable() { return this->available; }
 };
 
 #endif // !SEAT_H
