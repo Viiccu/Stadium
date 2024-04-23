@@ -6,5 +6,5 @@ using namespace std;
 int main()
 {
     StadiumPlan stadium;
-    cout << stadium.FindNearestSeat("CE01");
+    stadium.DisplayStadium();
 }

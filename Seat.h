@@ -12,7 +12,7 @@ private:
 	char section{ ' ' };
 	char row{ ' ' };
 	int number{ 0 };
-	bool available{ false };
+	bool available{ true };
 
 public:
 	// ctors

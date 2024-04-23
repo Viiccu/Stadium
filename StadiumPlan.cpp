@@ -70,13 +70,10 @@ string StadiumPlan::FindSeat(map<string, Seat> &section, string seat, char maxLe
 				string key = "";
 				string aux = "";
 				aux = (row + j);
-
 				key += seat[0] + aux + ((((column + k) / 10) > 0) ? "" : "0") + to_string(column + k);
 
 				if (section.find(key) != section.end() && section.find(key)->second.IsAvailable())
-				{
 					return section.find(key)->second.GetSeat();
-				}
 			}
 		}
 	}
@@ -105,3 +102,61 @@ string StadiumPlan::FindNearestSeat(string seat)
 	return "";
 }
 
+void StadiumPlan::DisplayStadium()
+{
+	for (int i = 1; i < 26; i++)
+		cout << " ";
+
+	for (int i = 1; i < 11; i++)
+	{
+		string key = "";
+		key += "AA";
+		key += (i == 10) ? "" : "0";
+		key += to_string(i);
+		cout << sectionA.find(key)->second << " ";
+	}
+
+	cout << "\n\n     ";
+	DisplayRow(sectionB, 'A', 'B');
+	cout << '\n';
+
+	for (char c = 'A'; c <= 'L'; c++)
+	{
+		DisplayRow(sectionD, c, 'D');
+		if (c <= 'D') DisplayRow(sectionB, c + 1, 'B');
+		if (c > 'D' && c < 'I')
+		{
+			for (int i = 0; i < 55; i++) cout << " ";
+		}
+		if (c >= 'I') DisplayRow(sectionC, c - 8, 'C');
+		DisplayRow(sectionE, c, 'E');
+		cout << "\n";
+	}
+
+	cout << "     ";
+	DisplayRow(sectionC, 'E', 'C');
+}
+
+void StadiumPlan::DisplayRow(map<string, Seat> &section, char row, char sectionInitial)
+{
+	for (int i = 1; i <= 18; i++)
+	{
+		string key = "";
+		key += sectionInitial;
+		key += row;
+		key += (i >= 10) ? "" : "0";
+		key += to_string(i);
+
+		auto seat = section.find(key);
+		if (seat != section.end())
+		{
+			cout << seat->second << " ";
+		}
+		else if (sectionInitial == 'D')
+		{
+			cout << "     ";
+			return;
+		}
+	}
+			cout << "     ";
+}

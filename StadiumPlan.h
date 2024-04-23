@@ -22,9 +22,12 @@ public:
 
 	// methods
 	string FindNearestSeat(string);
+	void DisplayStadium();
 
 private:
+	// methods
 	string FindSeat(map<string, Seat>&, string, char, int);
+	void DisplayRow(map<string, Seat>&, char, char);
 
 };
 
