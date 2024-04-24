@@ -37,6 +37,8 @@ public:
 
 	// methods
 	bool IsAvailable() { return this->available; }
+	void Book() { this->available = false; }
+	void CancelBooking() { this->available = true; }
 };
 
 #endif // !SEAT_H

@@ -92,9 +92,9 @@ string StadiumPlan::FindNearestSeat(string seat)
 	case 'C':
 		return FindSeat(sectionC, seat, 'E', 18);
 	case 'D':
-		return FindSeat(sectionB, seat, 'L', 4);
+		return FindSeat(sectionD, seat, 'L', 4);
 	case 'E': 
-		return FindSeat(sectionB, seat, 'L', 4);
+		return FindSeat(sectionE, seat, 'L', 4);
 
 	default: cout << "\n\nERROR 404 - Not Found: Such section does not exist! \n\n"; break;
 	}
@@ -135,6 +135,7 @@ void StadiumPlan::DisplayStadium()
 
 	cout << "     ";
 	DisplayRow(sectionC, 'E', 'C');
+	cout << "\n\n";
 }
 
 void StadiumPlan::DisplayRow(map<string, Seat> &section, char row, char sectionInitial)
@@ -159,4 +160,54 @@ void StadiumPlan::DisplayRow(map<string, Seat> &section, char row, char sectionI
 		}
 	}
 			cout << "     ";
+}
+
+void StadiumPlan::BookSeat(string seat)
+{
+	switch (seat[0])
+	{
+	case 'A':
+		FindAndBookSeat(sectionA, seat); break;
+	case 'B':
+		FindAndBookSeat(sectionB, seat); break;
+	case 'C':
+		FindAndBookSeat(sectionC, seat); break;
+	case 'D':
+		FindAndBookSeat(sectionD, seat); break;
+	case 'E':
+		FindAndBookSeat(sectionE, seat); break;
+	
+	default:
+		break;
+	}
+}
+
+void StadiumPlan::FindAndBookSeat(map<string, Seat> &section, string seatKey)
+{
+	auto seat = section.find(seatKey);
+	if (seat != section.end())
+	{
+		if (seat->second.IsAvailable())
+		{
+			seat->second.Book();
+			cout << "Seat successfully booked!\n";
+		}
+		else
+		{
+			cout << "The seat is already booked";
+			if (this->FindNearestSeat(seat->second.GetSeat()) != "")
+			{
+				cout << " - The closest available seat in the same section is: " 
+					<< this->FindNearestSeat(seat->second.GetSeat()) << '\n';
+			}
+			else
+			{
+				cout << "There are no more available seats in this section\n";
+			}
+		}
+	}
+	else
+	{
+		cout << "The seat doesn't exist\n";
+	}
 }
