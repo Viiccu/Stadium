@@ -1,5 +1,6 @@
 ﻿#include "StadiumPlan.h"
 #include <vector>
+#include <algorithm>
 
 
 StadiumPlan::StadiumPlan()
@@ -52,7 +53,7 @@ StadiumPlan::StadiumPlan()
 	}
 }
 
-string StadiumPlan::FindSeat(map<string, Seat> &section, string seat, char maxLetter, int maxNum)
+string StadiumPlan::FindSeat(map<string, Seat> &section, string& seat, char maxLetter, int maxNum)
 {
 	char row = seat[1];
 	int column = atoi(&seat[2]);
@@ -162,27 +163,32 @@ void StadiumPlan::DisplayRow(map<string, Seat> &section, char row, char sectionI
 			cout << "     ";
 }
 
-void StadiumPlan::BookSeat(string seat)
+bool StadiumPlan::BookSeat(string& seat)
 {
+	transform(seat.begin(), seat.end(), seat.begin(), ::toupper);
+
 	switch (seat[0])
 	{
 	case 'A':
-		FindAndBookSeat(sectionA, seat); break;
+		return FindAndBookSeat(sectionA, seat); break;
 	case 'B':
-		FindAndBookSeat(sectionB, seat); break;
+		return FindAndBookSeat(sectionB, seat); break;
 	case 'C':
-		FindAndBookSeat(sectionC, seat); break;
+		return FindAndBookSeat(sectionC, seat); break;
 	case 'D':
-		FindAndBookSeat(sectionD, seat); break;
+		return FindAndBookSeat(sectionD, seat); break;
 	case 'E':
-		FindAndBookSeat(sectionE, seat); break;
+		return FindAndBookSeat(sectionE, seat); break;
 	
 	default:
+		cout << "ERROR 404: invalid seat number!\n";
 		break;
 	}
+
+	return false;
 }
 
-void StadiumPlan::FindAndBookSeat(map<string, Seat> &section, string seatKey)
+bool StadiumPlan::FindAndBookSeat(map<string, Seat> &section, string& seatKey)
 {
 	auto seat = section.find(seatKey);
 	if (seat != section.end())
@@ -190,24 +196,89 @@ void StadiumPlan::FindAndBookSeat(map<string, Seat> &section, string seatKey)
 		if (seat->second.IsAvailable())
 		{
 			seat->second.Book();
-			cout << "Seat successfully booked!\n";
+			cout << "Seat booked!\n";
+			return true;
 		}
 		else
 		{
-			cout << "The seat is already booked";
 			if (this->FindNearestSeat(seat->second.GetSeat()) != "")
 			{
-				cout << " - The closest available seat in the same section is: " 
-					<< this->FindNearestSeat(seat->second.GetSeat()) << '\n';
+				cout << "Seat '" << seat->second.GetSeat() 
+					<< "' is not available (closest is '" 
+					<< this->FindNearestSeat(seat->second.GetSeat()) 
+					<< "')\n";
 			}
-			else
+			else if(!CheckIfStadiumFull())
 			{
-				cout << "There are no more available seats in this section\n";
+				cout << "There are no more available seats in this section!\n";
+			}
+			else 
+			{
+				cout << "There are no more available seats for this game!\n";
 			}
 		}
 	}
 	else
 	{
-		cout << "The seat doesn't exist\n";
+		cout << "ERROR 404: invalid seat number!\n";
 	}
+
+	return false;
 }
+
+bool StadiumPlan::CancelSeat(map<string, Seat>& section, string& seatKey)
+{
+	auto seat = section.find(seatKey);
+	if (seat != section.end())
+	{
+		seat->second.CancelBooking();
+		return true;
+	}
+	else
+	{
+		cout << "ERROR: This seat does not exist!\n\n";
+	}
+
+	return false;
+}
+
+bool StadiumPlan::CancelBooking(string& seat)
+{
+	transform(seat.begin(), seat.end(), seat.begin(), ::toupper);
+
+	switch (seat[0])
+	{
+	case 'A': 
+		return CancelSeat(sectionA, seat); 
+	case 'B': 
+		return CancelSeat(sectionB, seat); 
+	case 'C': 
+		return CancelSeat(sectionC, seat); 
+	case 'D': 
+		return CancelSeat(sectionD, seat); 
+	case 'E': 
+		return CancelSeat(sectionE, seat); 
+
+	default: 
+		break;
+	}
+
+	return false;
+}
+
+bool StadiumPlan::CheckIfStadiumFull() 
+{
+	for (auto it : this->sectionA)
+		if (it.second.IsAvailable()) return false;
+	for (auto it : this->sectionB)
+		if (it.second.IsAvailable()) return false;
+	for (auto it : this->sectionC)
+		if (it.second.IsAvailable()) return false;
+	for (auto it : this->sectionD)
+		if (it.second.IsAvailable()) return false;
+	for (auto it : this->sectionE)
+		if (it.second.IsAvailable()) return false;
+	
+	return true;
+}
+

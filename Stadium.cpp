@@ -1,13 +1,10 @@
 #include <iostream>
-#include "StadiumPlan.h"
+#include "Menu.h"
 
 using namespace std;
 
 int main()
 {
-    StadiumPlan stadium;
-    stadium.DisplayStadium();
-
-    stadium.BookSeat("BB07");
-    stadium.BookSeat("BB07");
+    Menu menu;
+    menu.DisplayMenu();
 }

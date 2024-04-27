@@ -21,15 +21,18 @@ public:
 	StadiumPlan();
 
 	// methods
-	string FindNearestSeat(string);
 	void DisplayStadium();
-	void BookSeat(string);
+	bool BookSeat(string&);
+	bool CancelBooking(string&);
+	bool CheckIfStadiumFull();
 
 private:
 	// methods
-	string FindSeat(map<string, Seat>&, string, char, int);
 	void DisplayRow(map<string, Seat>&, char, char);
-	void FindAndBookSeat(map<string, Seat>&, string);
+	string FindNearestSeat(string);
+	bool FindAndBookSeat(map<string, Seat>&, string&);
+	string FindSeat(map<string, Seat>&, string&, char, int);
+	bool CancelSeat(map<string, Seat>&, string&);
 };
 
 #endif // !STADIUMPLAN_H
