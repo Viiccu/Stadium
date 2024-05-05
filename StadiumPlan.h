@@ -33,6 +33,10 @@ private:
 	bool FindAndBookSeat(map<string, Seat>&, string&);
 	string FindSeat(map<string, Seat>&, string&, char, int);
 	bool CancelSeat(map<string, Seat>&, string&);
+
+	// better methods
+	string FindNearestSeatBetter(string);
+	string FindSeatBetter(map<string, Seat>&, string&, char, int);
 };
 
 #endif // !STADIUMPLAN_H

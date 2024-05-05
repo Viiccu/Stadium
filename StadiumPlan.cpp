@@ -103,6 +103,32 @@ string StadiumPlan::FindNearestSeat(string seat)
 	return "";
 }
 
+string StadiumPlan::FindSeatBetter(map<string, Seat>& section, string& seat, char maxLetter, int maxNum)
+{
+	return "";
+}
+
+string StadiumPlan::FindNearestSeatBetter(string seat)
+{
+	switch (seat[0])
+	{
+	case 'A':
+		return FindSeatBetter(sectionA, seat, 'A', 10);
+	case 'B':
+		return FindSeatBetter(sectionB, seat, 'E', 18);
+	case 'C':
+		return FindSeatBetter(sectionC, seat, 'E', 18);
+	case 'D':
+		return FindSeatBetter(sectionD, seat, 'L', 4);
+	case 'E':
+		return FindSeatBetter(sectionE, seat, 'L', 4);
+
+	default: cout << "\n\nERROR 404 - Not Found: Such section does not exist! \n\n"; break;
+	}
+
+	return "";
+}
+
 void StadiumPlan::DisplayStadium()
 {
 	for (int i = 1; i < 26; i++)
