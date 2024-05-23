@@ -103,8 +103,57 @@ string StadiumPlan::FindNearestSeat(string seat)
 	return "";
 }
 
+string StadiumPlan::MakeString(char sectionId, char row, int number) 
+{
+	string key = "";
+	string aux = "";
+	key = sectionId;
+	aux = row;
+	key += aux + ((number > 9) ? "" : "0") + to_string(number);
+
+	return key;
+}
+
 string StadiumPlan::FindSeatBetter(map<string, Seat>& section, string& seat, char maxLetter, int maxNum)
 {
+	for (int i = 1; i <= 18; i++)
+	{
+		for (int j = 0; j <= i; j++)
+		{
+			if ((section.find(MakeString('B', seat[1] - j, section.at(seat).GetNumber() - i)) != section.end())
+				&& (section.at(MakeString('B', seat[1] - j, section.at(seat).GetNumber() - i)).IsAvailable()))
+				return section.at(MakeString('B', seat[1] - j, section.at(seat).GetNumber() - i)).GetSeat();
+
+			if ((section.find(MakeString('B', seat[1] + j, section.at(seat).GetNumber() - i)) != section.end())
+				&& section.at(MakeString('B', seat[1] + j, section.at(seat).GetNumber() - i)).IsAvailable())
+				return section.at(MakeString('B', seat[1] + j, section.at(seat).GetNumber() - i)).GetSeat();
+			
+			if ((section.find(MakeString('B', seat[1] - j, section.at(seat).GetNumber() + i)) != section.end())
+				&& section.at(MakeString('B', seat[1] - j, section.at(seat).GetNumber() + i)).IsAvailable())
+				return section.at(MakeString('B', seat[1] - j, section.at(seat).GetNumber() + i)).GetSeat();
+			
+			if ((section.find(MakeString('B', seat[1] + j, section.at(seat).GetNumber() + i)) != section.end())
+				&& section.at(MakeString('B', seat[1] + j, section.at(seat).GetNumber() + i)).IsAvailable())
+				return section.at(MakeString('B', seat[1] + j, section.at(seat).GetNumber() + i)).GetSeat();
+
+			if ((section.find(MakeString('B', seat[1] - i, section.at(seat).GetNumber() - j)) != section.end())
+				&& section.at(MakeString('B', seat[1] - i, section.at(seat).GetNumber() - j)).IsAvailable())
+				return section.at(MakeString('B', seat[1] - i, section.at(seat).GetNumber() - j)).GetSeat();
+			
+			if ((section.find(MakeString('B', seat[1] - i, section.at(seat).GetNumber() + j)) != section.end())
+				&& section.at(MakeString('B', seat[1] - i, section.at(seat).GetNumber() + j)).IsAvailable())
+				return section.at(MakeString('B', seat[1] - i, section.at(seat).GetNumber() + j)).GetSeat();
+			
+			if ((section.find(MakeString('B', seat[1] + i, section.at(seat).GetNumber() - j)) != section.end())
+				&& section.at(MakeString('B', seat[1] + i, section.at(seat).GetNumber() - j)).IsAvailable())
+				return section.at(MakeString('B', seat[1] + i, section.at(seat).GetNumber() - j)).GetSeat();
+																						  
+			if ((section.find(MakeString('B', seat[1] + i, section.at(seat).GetNumber() + j)) != section.end())
+				&& section.at(MakeString('B', seat[1] + i, section.at(seat).GetNumber() + j)).IsAvailable())
+				return section.at(MakeString('B', seat[1] + i, section.at(seat).GetNumber() + j)).GetSeat();
+		}
+	}
+
 	return "";
 }
 
@@ -123,7 +172,7 @@ string StadiumPlan::FindNearestSeatBetter(string seat)
 	case 'E':
 		return FindSeatBetter(sectionE, seat, 'L', 4);
 
-	default: cout << "\n\nERROR 404 - Not Found: Such section does not exist! \n\n"; break;
+	default: std::cout << "\n\nERROR 404 - Not Found: Such section does not exist! \n\n"; break;
 	}
 
 	return "";
@@ -227,11 +276,11 @@ bool StadiumPlan::FindAndBookSeat(map<string, Seat> &section, string& seatKey)
 		}
 		else
 		{
-			if (this->FindNearestSeat(seat->second.GetSeat()) != "")
+			if (this->FindNearestSeatBetter(seat->second.GetSeat()) != "")
 			{
 				cout << "Seat '" << seat->second.GetSeat() 
 					<< "' is not available (closest is '" 
-					<< this->FindNearestSeat(seat->second.GetSeat()) 
+					<< this->FindNearestSeatBetter(seat->second.GetSeat()) 
 					<< "')\n";
 			}
 			else if(!CheckIfStadiumFull())
@@ -241,6 +290,7 @@ bool StadiumPlan::FindAndBookSeat(map<string, Seat> &section, string& seatKey)
 			else 
 			{
 				cout << "There are no more available seats for this game!\n";
+				return true;
 			}
 		}
 	}

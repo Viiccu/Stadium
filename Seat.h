@@ -25,7 +25,6 @@ public:
 	char GetRow() const { return this->row; }
 	int GetNumber() const { return this->number; }
 	std::string GetSeat() const;
-	
 
 	// setters
 	void SetSection(char section);
